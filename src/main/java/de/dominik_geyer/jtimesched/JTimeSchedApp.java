@@ -54,7 +54,9 @@ public class JTimeSchedApp {
 		// FIXME: allow custom configuration path via command-line argument [#22]
 		File dirConf = new File(JTimeSchedApp.CONF_PATH);
 		if (!dirConf.isDirectory())
-			dirConf.mkdir();
+			if(!dirConf.mkdir()) {
+				System.err.println("Error creating directory...");
+			}
 		
 		// request lock
 		if (!JTimeSchedApp.lockInstance()) {
@@ -113,7 +115,9 @@ public class JTimeSchedApp {
 						try {
 							fileLock.release();
 							randomAccessFile.close();
-							file.delete();
+							if(!file.delete()) {
+								System.err.println("Unable to delete file");
+							}
 						} catch (Exception e) {
 							System.err.println("Unable to remove lock file: " + JTimeSchedApp.LOCK_FILE + " " + e.getMessage());
 						}

@@ -50,15 +50,20 @@ public class TimeCellRenderer extends JLabel implements TableCellRenderer {
 			tcc.setToolTipText(prj.getQuotaToday() > 0 ?
 					String.format("Quota today: %s", ProjectTime.formatSeconds(prj.getQuotaToday())) :
 					null);
+			setFontAndBackground(table, isSelected, prj, tcc);
 			break;
 		case ProjectTableModel.COLUMN_TIMEOVERALL:
 			tcc = new TimeCellComponent(prj.getSecondsOverall(), prj.getQuotaOverall());
 			tcc.setToolTipText(prj.getQuotaOverall() > 0 ?
 					String.format("Quota overall: %s", ProjectTime.formatSeconds(prj.getQuotaOverall())) :
 					null);
+			setFontAndBackground(table, isSelected, prj, tcc);
 			break;
 		}
-		
+		return tcc;
+	}
+
+	private void setFontAndBackground(JTable table, boolean isSelected, Project prj, TimeCellComponent tcc) {
 		if (prj.isRunning()) {
 			tcc.setFont(tcc.getFont().deriveFont(Font.BOLD));
 			tcc.setBackground(CustomCellRenderer.COLOR_RUNNING);
@@ -71,7 +76,5 @@ public class TimeCellRenderer extends JLabel implements TableCellRenderer {
 				tcc.setBackground(table.getBackground());
 			}
 		}
-		
-		return tcc;
 	}
 }
