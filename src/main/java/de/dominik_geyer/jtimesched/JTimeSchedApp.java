@@ -43,7 +43,7 @@ public class JTimeSchedApp {
 	static public final String LOCK_FILE = CONF_PATH + "jTimeSched.lock";
 	static public final String LOG_FILE = CONF_PATH + "jTimeSched.log";
 	
-	static private Logger LOGGER;
+	static public Logger LOGGER;
 	
 	/**
 	 * Application's entry point.
