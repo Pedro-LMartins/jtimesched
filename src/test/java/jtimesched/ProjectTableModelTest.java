@@ -2,10 +2,13 @@ package jtimesched;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,8 +86,6 @@ class ProjectTableModelTest {
 					"If column cannot be found, should return an empty string");
 		}
 		
-		// White-box tests
-
 	}
 
 	@Nested
@@ -116,8 +117,6 @@ class ProjectTableModelTest {
 					"Obtaining an inexistent project should raise an exception");
 		}
 		
-		// White-box tests
-
 	}
 	
 	@Nested
@@ -168,8 +167,99 @@ class ProjectTableModelTest {
 					"If column cannot be found, should should raise an exception");
 		}
 		
-		// White-box tests
+		// Branch Coverage tests
 
+		@Test
+		@DisplayName("Check column with unchecked project")
+		public void testGetValueAtColumnCheckWithUncheckedProject() {
+			Project project = new Project();
+			project.setChecked(false);
+			
+			table.addProject(project);
+			
+			assertEquals(false, table.getValueAt(0, ProjectTableModel.COLUMN_CHECK));
+		}
+		
+		@Test
+		@DisplayName("Check column with checked project")
+		public void testGetValueAtColumnCheckWithCheckedProject() {
+			Project project = new Project();
+			project.setChecked(true);
+			
+			table.addProject(project);
+			
+			assertEquals(true, table.getValueAt(0, ProjectTableModel.COLUMN_CHECK));
+		}
+		
+		@Test
+		@DisplayName("Color column")
+		public void testGetValueAtColumnColor() {
+			Project project = new Project();
+			
+			Color pColor = new Color(255, 255, 255);	// White
+			project.setColor(pColor);
+			
+			table.addProject(project);
+
+			assertEquals(pColor, table.getValueAt(0, ProjectTableModel.COLUMN_COLOR));
+		}
+		
+		@Test
+		@DisplayName("Created column")
+		public void testGetValueAtColumnDateOfCreation() {
+			Project project = new Project();
+			Date creationDate = new Date();
+			project.setTimeCreated(creationDate);
+			
+			table.addProject(project);
+
+			assertEquals(creationDate, table.getValueAt(0, ProjectTableModel.COLUMN_CREATED));
+		}
+		
+		@Test
+		@DisplayName("Time Overall column")
+		public void testGetValueAtColumnOverallTime() {
+			Project project = new Project();
+			int seconds = 86400;	// One full day
+			project.setSecondsOverall(seconds);
+			
+			table.addProject(project);
+
+			assertEquals(seconds, table.getValueAt(0, ProjectTableModel.COLUMN_TIMEOVERALL));
+		}
+		
+		@Test
+		@DisplayName("Time Today column")
+		public void testGetValueAtColumnTimeToday() {
+			Project project = new Project();
+			int seconds = 60;
+			project.setSecondsToday(seconds);
+			
+			table.addProject(project);
+
+			assertEquals(seconds, table.getValueAt(0, ProjectTableModel.COLUMN_TIMETODAY));
+		}
+		
+		@Test
+		@DisplayName("Delete Action column")
+		public void testGetValueAtColumnDelete() throws ProjectException {
+			Project project = new Project();
+			project.start();
+			
+			table.addProject(project);
+
+			assertEquals(true, table.getValueAt(0, ProjectTableModel.COLUMN_ACTION_DELETE));
+		}
+		
+		@Test
+		@DisplayName("Start/Pause Action column")
+		public void testGetValueAtColumnStartPause() throws ProjectException {
+			Project project = new Project();
+//			project.pause();
+			table.addProject(project);
+
+			assertEquals(false, table.getValueAt(0, ProjectTableModel.COLUMN_ACTION_STARTPAUSE));
+		}
 	}
 
 	@Nested
@@ -280,7 +370,194 @@ class ProjectTableModelTest {
 					"If column cannot be found, should should raise an exception");
 		}
 		
-		// White-box tests
+		// Branch Coverage tests
+		
+		@Test
+		@DisplayName("Time Overall with project running")
+		public void testIsCellEditableOverallTimeWithProjectRunning() throws ProjectException {
+			Project project = new Project();
+			project.start();
+			table.addProject(project);
 
+			assertFalse(table.isCellEditable(0, ProjectTableModel.COLUMN_TIMEOVERALL));
+		}
+		
+		@Test
+		@DisplayName("Time Today with project paused")
+		public void testIsCellEditableTimeTodayWithProjectPaused() throws ProjectException {
+			Project project = new Project();
+//			project.pause();
+			table.addProject(project);
+
+			assertTrue(table.isCellEditable(0, ProjectTableModel.COLUMN_TIMETODAY));
+		}
+	}
+	
+	@Nested
+	@DisplayName("Tests for getColumnClass")
+	class TestGetColumnClass {
+		
+		@Test
+		@DisplayName("Column Color's class")
+		public void testGetColumnClass() {
+			assertEquals(Color.class, table.getColumnClass(ProjectTableModel.COLUMN_COLOR));
+		}
+		
+		@Test
+		@DisplayName("Column Created's class")
+		public void testGetColumnClassDateOfCreation() {
+			assertEquals(Date.class, table.getColumnClass(ProjectTableModel.COLUMN_CREATED));
+		}
+		
+		@Test
+		@DisplayName("Column Overall Time's class")
+		public void testGetColumnClassOverallTime() {
+			assertEquals(Integer.class, table.getColumnClass(ProjectTableModel.COLUMN_TIMEOVERALL));
+		}
+		
+		@Test
+		@DisplayName("Column Time Today's class")
+		public void testGetColumnClassTimeToday() {
+			assertEquals(Integer.class, table.getColumnClass(ProjectTableModel.COLUMN_TIMEOVERALL));
+		}
+		
+		@Test
+		@DisplayName("Column Check's class")
+		public void testGetColumnClassCheck() {
+			assertEquals(Boolean.class, table.getColumnClass(ProjectTableModel.COLUMN_CHECK));
+		}
+		
+		@Test
+		@DisplayName("Unkwown column's class")
+		public void testGetColumnClassUnkwown() {
+			assertEquals(String.class, table.getColumnClass(table.getColumnCount() + 1));
+		}
+	}
+	
+	@Nested
+	@DisplayName("Tests for setValueAt")
+	class TestSetValueAt {
+		
+		@Test
+		@DisplayName("Setting a project as checked")
+		public void testSetValueAtChecked() {
+			Project project = new Project();
+			project.setChecked(false);
+			
+			table.addProject(project);
+			table.setValueAt(true, 0, ProjectTableModel.COLUMN_CHECK);
+			
+			assertTrue(project.isChecked());
+		}
+		
+		@Test
+		@DisplayName("Setting a project as unchecked")
+		public void testSetValueAtUnchecked() {
+			Project project = new Project();
+			project.setChecked(true);
+			
+			table.addProject(project);
+			table.setValueAt(false, 0, ProjectTableModel.COLUMN_CHECK);
+			
+			assertFalse(project.isChecked());
+		}
+		
+		@Test
+		@DisplayName("Setting a project title")
+		public void testSetValueAtTitle() {
+			Project project = new Project("old title");
+			String newTitle = "new title";
+			
+			table.addProject(project);
+			table.setValueAt(newTitle, 0, ProjectTableModel.COLUMN_TITLE);
+			
+			assertEquals(newTitle, table.getValueAt(0, ProjectTableModel.COLUMN_TITLE));
+		}
+		
+		@Test
+		@DisplayName("Setting a project color")
+		public void testSetValueAtColor() {
+			Color oldColor = new Color(0, 255, 0);	// Green
+			Color newColor = new Color(255, 0, 0);	// Red
+			
+			Project project = new Project();
+			project.setColor(oldColor);
+			
+			table.addProject(project);
+			table.setValueAt(newColor, 0, ProjectTableModel.COLUMN_COLOR);
+			
+			assertEquals(newColor, table.getValueAt(0, ProjectTableModel.COLUMN_COLOR));
+		}
+		
+		@Test
+		@DisplayName("Setting a project time of creation")
+		public void testSetValueAtTimeOfCreation() {
+			Date oldDate = new Date(0);
+			Date newDate = new Date(60000);	// One month difference
+			
+			Project project = new Project();
+			project.setTimeCreated(oldDate);
+			
+			table.addProject(project);
+			table.setValueAt(newDate, 0, ProjectTableModel.COLUMN_CREATED);
+			
+			assertEquals(newDate, table.getValueAt(0, ProjectTableModel.COLUMN_CREATED));
+		}
+		
+		@Test
+		@DisplayName("Setting a project overall time")
+		public void testSetValueAtOverallTime() {
+			int oldSeconds = 0;
+			int newSeconds = 60;	// One minute difference
+			
+			Project project = new Project();
+			project.setSecondsOverall(oldSeconds);
+			
+			table.addProject(project);
+			table.setValueAt(newSeconds, 0, ProjectTableModel.COLUMN_TIMEOVERALL);
+			
+			assertEquals(newSeconds, table.getValueAt(0, ProjectTableModel.COLUMN_TIMEOVERALL));
+		}
+		
+		@Test
+		@DisplayName("Setting a project time today")
+		public void testSetValueAtTimeToday() {
+			int oldSeconds = 0;
+			int newSeconds = 60;	// One minute difference
+			
+			Project project = new Project();
+			project.setSecondsToday(oldSeconds);
+			
+			table.addProject(project);
+			table.setValueAt(newSeconds, 0, ProjectTableModel.COLUMN_TIMETODAY);
+			
+			assertEquals(newSeconds, table.getValueAt(0, ProjectTableModel.COLUMN_TIMETODAY));
+		}
+		
+		@Test
+		@DisplayName("Setting an unexisting project property")
+		public void testSetValueAtUnexistingProperty() {
+			Project project = new Project();
+			int unexistingColumn = table.getColumnCount() + 1;
+			
+			table.addProject(project);
+			table.setValueAt(null, 0, unexistingColumn);
+			
+			assertThrows(ProjectException.class, () -> table.getValueAt(0, unexistingColumn));
+		}
+	}
+	
+	@Nested
+	@DisplayName("Tests for removeProject")
+	class TestRemoveProject {
+		
+		@Test
+		@DisplayName("Removing existing project")
+		public void testRemoveProject() {
+			table.addProject(new Project());
+			table.removeProject(0);
+			
+			assertEquals(null, table.getProjectAt(0), "No projects should remain after removal");
+		}
 	}
 }
