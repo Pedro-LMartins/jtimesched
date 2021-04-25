@@ -30,15 +30,16 @@ public class ProjectTime {
 	private ProjectTime() {}
 	
 	public static String formatSeconds(int s) {
-		return String.format("%d:%02d:%02d", s/3600, (s%3600)/60, (s%60));
+		return String.format("%02d:%02d:%02d", s/3600, (s%3600)/60, (s%60));
 	}
 	
-	public static int parseSeconds(String strTime) throws ParseException {
+	public static int parseSeconds(String strTime) throws ProjectException {
 		 Pattern p = Pattern.compile("(\\d+):([0-5]?\\d):([0-5]?\\d)");	// 0:00:00
 		 Matcher m = p.matcher(strTime);
 		 
-		 if (!m.matches())
-			 throw new ParseException("Invalid seconds-string", 0);
+		 if (!m.matches()) {
+			 throw new ProjectException("Error parsing seconds", new ParseException("Invalid seconds-string", 0));
+		 }
 		 
 		 int hours = Integer.parseInt(m.group(1));
 		 int minutes = Integer.parseInt(m.group(2));
@@ -52,8 +53,12 @@ public class ProjectTime {
 		return sdf.format(d);
 	}
 	
-	public static Date parseDate(String strDate) throws ParseException {
+	public static Date parseDate(String strDate) throws ProjectException {
 		SimpleDateFormat sdf = new SimpleDateFormat(ProjectTime.fmtDate);
-		return sdf.parse(strDate);
+		try {
+			return sdf.parse(strDate);
+		} catch (ParseException e) {
+			throw new ProjectException("Error parsing date", e);
+		}
 	}
 }
