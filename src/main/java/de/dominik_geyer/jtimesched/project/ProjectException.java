@@ -23,4 +23,8 @@ public class ProjectException extends Exception {
 	public ProjectException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+	
+	public ProjectException(String msg) {
+		super(msg);
+	}
 }

@@ -26,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import de.dominik_geyer.jtimesched.project.ProjectException;
 import de.dominik_geyer.jtimesched.project.ProjectTime;
 
 
@@ -50,7 +51,7 @@ public class TimeCellEditor extends DefaultCellEditor {
 		else {
 			try {
 				newSeconds = ProjectTime.parseSeconds(strTime);
-			} catch (ParseException e) {
+			} catch (ProjectException e) {
 				System.err.println("Invalid seconds-string, keeping previous value");
 			}
 		}

@@ -30,6 +30,9 @@ public class ProjectTime {
 	private ProjectTime() {}
 	
 	public static String formatSeconds(int s) {
+		if( s < 0) {
+			return "";
+		}
 		return String.format("%02d:%02d:%02d", s/3600, (s%3600)/60, (s%60));
 	}
 	
@@ -49,6 +52,9 @@ public class ProjectTime {
 	}
 	
 	public static String formatDate(Date d) {
+		if(d == null) {
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat(ProjectTime.fmtDate);
 		return sdf.format(d);
 	}

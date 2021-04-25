@@ -834,7 +834,7 @@ public class JTimeSchedFrame extends JFrame {
 								prj.setQuotaToday(newSeconds);
 							
 							tstm.fireTableRowsUpdated(row, row);
-						} catch (ParseException pe) {
+						} catch (ProjectException pe) {
 							JOptionPane.showMessageDialog(JTimeSchedFrame.this,
 									"Invalid seconds-string, keeping previous value.",
 									"Invalid input",

@@ -27,6 +27,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import de.dominik_geyer.jtimesched.project.ProjectException;
 import de.dominik_geyer.jtimesched.project.ProjectTime;
 
 
@@ -51,7 +52,7 @@ public class DateCellEditor extends DefaultCellEditor {
 		else {
 			try {
 				newDate = ProjectTime.parseDate(strDate);
-			} catch (ParseException e) {
+			} catch (ProjectException e) {
 				System.err.println("Invalid date-string, keeping previous value");
 			}
 		}
