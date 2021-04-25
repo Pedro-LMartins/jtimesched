@@ -110,8 +110,15 @@ class ProjectTest {
 		@Test
 		@DisplayName("Test pause with a paused project")
 		void testpauseWithpausedProject() {
-			assertThrows(ProjectException.class, () -> project.pause(),
-					"Should throw an exception when trying to pause when the program is already paused");
+			try {
+				project.pause();
+				assertThrows(ProjectException.class, () -> project.pause(),
+						"Should throw an exception when trying to pause when the program is already paused");
+			}
+			catch (ProjectException e) {
+				fail(e);
+			}
+			
 		}
 		
 		@Test
