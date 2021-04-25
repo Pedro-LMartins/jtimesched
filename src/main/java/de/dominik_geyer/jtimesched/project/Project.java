@@ -231,4 +231,55 @@ public class Project {
 				secondsOverall, secondsToday,
 				(checked) ? "yes" : "no");
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Project other = (Project) obj;
+		if (checked != other.checked)
+			return false;
+		if (color == null) {
+			if (other.color != null)
+				return false;
+		} else if (!color.equals(other.color))
+			return false;
+		if (notes == null) {
+			if (other.notes != null)
+				return false;
+		} else if (!notes.equals(other.notes))
+			return false;
+		if (quotaOverall != other.quotaOverall)
+			return false;
+		if (quotaToday != other.quotaToday)
+			return false;
+		if (running != other.running)
+			return false;
+		if (secondsOverall != other.secondsOverall)
+			return false;
+		if (secondsToday != other.secondsToday)
+			return false;
+		if (timeCreated == null) {
+			if (other.timeCreated != null)
+				return false;
+		} else if (!timeCreated.equals(other.timeCreated))
+			return false;
+		if (timeStart == null) {
+			if (other.timeStart != null)
+				return false;
+		} else if (!timeStart.equals(other.timeStart))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+	
+
 }

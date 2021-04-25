@@ -138,7 +138,7 @@ public class ProjectSerializer {
 			if (e.getFirstChild() != null) {
 				p.setTitle(e.getFirstChild().getNodeValue());
 			} else {
-				p.setTitle("");
+				p.setTitle(null);
 			}
 			
 			e = getFirstElement(pe, "created");
