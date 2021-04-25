@@ -1,9 +1,11 @@
 package jtimesched;
 
-import static org.junit.Assert.assertTrue;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
@@ -97,14 +99,14 @@ class ProjectTableModelTest {
 		@Test
 		@DisplayName("getProjectAt with negative row index")
 		public void testGetProjectAtNegativeLine() {
-			assertThrows(ProjectException.class, () -> table.getProjectAt(-1),
-					"Obtaining an inexistent project should raise an exception");
+			assertNull(table.getProjectAt(-1), "Obtaining an inexistent project should return null");
 		}
 
 		@Test
 		@DisplayName("getProjectAt with existent project")
 		public void testGetProject() {
 			Project expected = new Project("title");
+			table.addProject(expected);
 			Project actual = table.getProjectAt(0);
 
 			assertEquals(expected, actual, "Project obtained should be the same");
@@ -113,8 +115,7 @@ class ProjectTableModelTest {
 		@Test
 		@DisplayName("getProjectAt with inexisting project")
 		public void testGetProjectAtInexistingLine() {
-			assertThrows(ProjectException.class, () -> table.getProjectAt(100),
-					"Obtaining an inexistent project should raise an exception");
+			assertNull(table.getProjectAt(100), "Obtaining an inexistent project should return null");
 		}
 		
 	}
@@ -128,8 +129,8 @@ class ProjectTableModelTest {
 		@Test
 		@DisplayName("getValueAt with a negative row index")
 		public void testGetValueAtWithNegativeLine() {
-			assertThrows(ProjectException.class, () -> table.getValueAt(-1, ProjectTableModel.COLUMN_TITLE),
-					"Obtaining an inexistent project should raise an exception");
+			assertNull(table.getValueAt(-1, ProjectTableModel.COLUMN_TITLE),
+					"Obtaining an inexistent project should return null");
 		}
 
 		@Test
@@ -145,8 +146,8 @@ class ProjectTableModelTest {
 		@Test
 		@DisplayName("getValueAt with row index inexisting project")
 		public void testGetValueAtWithInexistingProject() {
-			assertThrows(ProjectException.class, () -> table.getValueAt(0, ProjectTableModel.COLUMN_TITLE),
-					"Obtaining an inexistent project should raise an exception");
+			assertNull(table.getValueAt(0, ProjectTableModel.COLUMN_TITLE),
+					"Obtaining an inexistent project should return null");
 		}
 
 		@Test
@@ -154,8 +155,8 @@ class ProjectTableModelTest {
 		public void testGetValueAtWithNegativeColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.getValueAt(0, -1),
-					"Obtaining an inexistent column should raise an exception");
+			assertNull(table.getValueAt(0, -1),
+					"Obtaining an inexistent column should return null");
 		}
 
 		@Test
@@ -163,8 +164,8 @@ class ProjectTableModelTest {
 		public void testGetValueAtWithNonExistentColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.getValueAt(0, table.getColumnCount() + 100),
-					"If column cannot be found, should should raise an exception");
+			assertNull(table.getValueAt(0, table.getColumnCount() + 100),
+					"If column cannot be found, should should return null");
 		}
 		
 		// Branch Coverage tests
@@ -273,8 +274,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableWithFirstRowOffPoint() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.isCellEditable(-1, ProjectTableModel.COLUMN_TITLE),
-					"Obtaining an inexistent project should raise an exception");
+			assertFalse(table.isCellEditable(-1, ProjectTableModel.COLUMN_TITLE));
 		}
 
 		@Test
@@ -290,8 +290,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableWithSecondRowOffPoint() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.getValueAt(1, ProjectTableModel.COLUMN_TITLE),
-					"Obtaining an inexistent project should raise an exception");
+			assertFalse(table.isCellEditable(1, ProjectTableModel.COLUMN_TITLE));
 		}
 
 		@Test
@@ -299,8 +298,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableFirstOffPointColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.isCellEditable(0, -1),
-					"Obtaining an inexistent column should raise an exception");
+			assertFalse(table.isCellEditable(0, -1));
 		}
 
 		@Test
@@ -308,7 +306,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableFirstOnPointColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.isCellEditable(0, 0));
+			assertFalse(table.isCellEditable(0, 0));
 		}
 
 		@Test
@@ -316,7 +314,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableSecondOnPointColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.isCellEditable(0, 7));
+			assertFalse(table.isCellEditable(0, 7));
 		}
 
 		@Test
@@ -324,8 +322,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableSecondOffPointColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.isCellEditable(0, 8),
-					"If column cannot be found, should should raise an exception");
+			assertFalse(table.isCellEditable(0, 8));
 		}
 
 		// Tests for Category-Partitioning
@@ -333,8 +330,7 @@ class ProjectTableModelTest {
 		@Test
 		@DisplayName("isCellEditable with a negative row index")
 		public void testIsCellEditableWithNegativeLine() {
-			assertThrows(ProjectException.class, () -> table.isCellEditable(-1, ProjectTableModel.COLUMN_TITLE),
-					"Obtaining an inexistent project should raise an exception");
+			assertFalse(table.isCellEditable(-1, ProjectTableModel.COLUMN_TITLE));
 		}
 
 		@Test
@@ -348,8 +344,7 @@ class ProjectTableModelTest {
 		@Test
 		@DisplayName("isCellEditable with row index of inexisting project")
 		public void testIsCellEditableWithInexistingProject() {
-			assertThrows(ProjectException.class, () -> table.getValueAt(0, ProjectTableModel.COLUMN_TITLE),
-					"Obtaining an inexistent project should raise an exception");
+			assertFalse(table.isCellEditable(0, ProjectTableModel.COLUMN_TITLE));
 		}
 
 		@Test
@@ -357,8 +352,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableNegativeColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.isCellEditable(0, -1),
-					"Obtaining an inexistent column should raise an exception");
+			assertFalse(table.isCellEditable(0, -1));
 		}
 
 		@Test
@@ -366,8 +360,7 @@ class ProjectTableModelTest {
 		public void testIsCellEditableWithNonExistentColumn() {
 			table.addProject(new Project("title"));
 
-			assertThrows(ProjectException.class, () -> table.isCellEditable(0, table.getColumnCount() + 100),
-					"If column cannot be found, should should raise an exception");
+			assertFalse(table.isCellEditable(0, table.getColumnCount() + 100));
 		}
 		
 		// Branch Coverage tests
@@ -543,7 +536,7 @@ class ProjectTableModelTest {
 			table.addProject(project);
 			table.setValueAt(null, 0, unexistingColumn);
 			
-			assertThrows(ProjectException.class, () -> table.getValueAt(0, unexistingColumn));
+			assertNull(table.getValueAt(0, unexistingColumn));
 		}
 	}
 	
@@ -557,7 +550,7 @@ class ProjectTableModelTest {
 			table.addProject(new Project());
 			table.removeProject(0);
 			
-			assertEquals(null, table.getProjectAt(0), "No projects should remain after removal");
+			assertEquals(0, table.getRowCount(), "No projects should remain after removal");
 		}
 	}
 }

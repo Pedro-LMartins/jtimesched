@@ -62,36 +62,43 @@ public class ProjectTableModel extends AbstractTableModel {
 	}
 
 	@Override
-	public Object getValueAt(int row, int column) {
+	public Object getValueAt(int row, int column){
 		Object o;
 		
-		Project prj = arPrj.get(row);
-		
-		switch (column) {
-		case ProjectTableModel.COLUMN_TITLE:
-			o = prj.getTitle();
-			break;
-		case ProjectTableModel.COLUMN_CHECK:
-			o = (prj.isChecked()) ? new Boolean(true) : new Boolean(false);
-			break;
-		case ProjectTableModel.COLUMN_COLOR:
-			o = prj.getColor();
-			break;
-		case ProjectTableModel.COLUMN_CREATED:
-			o = prj.getTimeCreated();
-			break;
-		case ProjectTableModel.COLUMN_TIMEOVERALL:
-			o = new Integer(prj.getSecondsOverall());
-			break;
-		case ProjectTableModel.COLUMN_TIMETODAY:
-			o = new Integer(prj.getSecondsToday());
-			break;
-		case ProjectTableModel.COLUMN_ACTION_DELETE:
-		case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
-			o = (prj.isRunning()) ? new Boolean(true) : new Boolean(false);
-			break;
-		default:
-			o = "wtf?";
+		try {
+			Project prj = arPrj.get(row);
+
+			switch (column) {
+			case ProjectTableModel.COLUMN_TITLE:
+				o = prj.getTitle();
+				break;
+			case ProjectTableModel.COLUMN_CHECK:
+				o = (prj.isChecked()) ? new Boolean(true) : new Boolean(false);
+				break;
+			case ProjectTableModel.COLUMN_COLOR:
+				o = prj.getColor();
+				break;
+			case ProjectTableModel.COLUMN_CREATED:
+				o = prj.getTimeCreated();
+				break;
+			case ProjectTableModel.COLUMN_TIMEOVERALL:
+				o = new Integer(prj.getSecondsOverall());
+				break;
+			case ProjectTableModel.COLUMN_TIMETODAY:
+				o = new Integer(prj.getSecondsToday());
+				break;
+			case ProjectTableModel.COLUMN_ACTION_DELETE:
+			case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
+				o = (prj.isRunning()) ? new Boolean(true) : new Boolean(false);
+				break;
+			default:
+				o = null;
+//			Can't do this because it is an override.
+//			throw new ProjectException("Error while retrieving value. Invalid column.");
+			}
+			
+		} catch (IndexOutOfBoundsException e) {
+			return null;
 		}
 
 		
@@ -99,12 +106,22 @@ public class ProjectTableModel extends AbstractTableModel {
 	}
 	
 	public Project getProjectAt(int row) {
-		return this.arPrj.get(row);
+		try {
+			return this.arPrj.get(row);
+		}
+		catch(IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		return this.columnNames[column];
+		try {
+			return this.columnNames[column];
+		}
+		catch(IndexOutOfBoundsException e) {
+			return "";
+		}
 	}
 	
 	@Override
@@ -131,6 +148,10 @@ public class ProjectTableModel extends AbstractTableModel {
 	@Override
 	public boolean isCellEditable(int row, int column) {
 		Project prj = this.getProjectAt(row);
+
+		if(prj == null) {
+			return false;
+		}
 		
 		switch (column) {
 		case ProjectTableModel.COLUMN_CHECK:
