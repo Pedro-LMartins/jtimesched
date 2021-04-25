@@ -75,7 +75,7 @@ class ProjectTimeTest {
 		@Test
 		@DisplayName("parseSeconds with value invalid")
 		public void TestParseSecondsexception() throws ParseException { 
-			assertThrows(ParseException.class, () -> ProjectTime.parseSeconds("99999999"),
+			assertThrows(ProjectException.class, () -> ProjectTime.parseSeconds("99999999"),
 					"Should return an exception");
 		}
 	}
@@ -98,7 +98,7 @@ class ProjectTimeTest {
 		@Test
 		@DisplayName("parsedate with value -1")
 		public void TestParseDate() throws ParseException {
-			assertThrows(ParseException.class, () -> ProjectTime.parseDate("99999999"),
+			assertThrows(ProjectException.class, () -> ProjectTime.parseDate("99999999"),
 					"weird format should return an exception");
 		}
 	}

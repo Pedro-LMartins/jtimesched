@@ -30,10 +30,7 @@ public class ProjectTime {
 	private ProjectTime() {}
 	
 	public static String formatSeconds(int s) {
-		if(s < 0) {
-			return "";
-		}
-		return String.format("%02d:%02d:%02d", s/3600, (s%3600)/60, (s%60));
+		return String.format("%d:%02d:%02d", s/3600, (s%3600)/60, (s%60));
 	}
 	
 	public static int parseSeconds(String strTime) throws ParseException {
@@ -50,10 +47,7 @@ public class ProjectTime {
 		 return (hours * 3600 + minutes * 60 + seconds);
 	}
 	
-	public static String formatDate(Date d) throws ProjectException {
-		if(d == null) {
-			throw new ProjectException("Error formating string. Date was null");
-		}
+	public static String formatDate(Date d) {
 		SimpleDateFormat sdf = new SimpleDateFormat(ProjectTime.fmtDate);
 		return sdf.format(d);
 	}
