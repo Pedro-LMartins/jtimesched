@@ -3,8 +3,6 @@ package jtimesched;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.text.ParseException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -68,13 +66,13 @@ class ProjectTimeTest {
 
 		@Test
 		@DisplayName("parseSeconds with value 59 seconds")
-		public void TestParseSecondsNegative() throws ParseException { 
+		public void TestParseSecondsNegative() throws ProjectException { 
 			assertEquals(59, ProjectTime.parseSeconds("00:00:59"),
 					"Should return 59");
 		}
 		@Test
 		@DisplayName("parseSeconds with value invalid")
-		public void TestParseSecondsexception() throws ParseException { 
+		public void TestParseSecondsException() { 
 			assertThrows(ProjectException.class, () -> ProjectTime.parseSeconds("99999999"),
 					"Should return an exception");
 		}
@@ -87,8 +85,7 @@ class ProjectTimeTest {
 		@Test
 		@DisplayName("FormatDate with null value")
 		public void TestFormatDate() {
-			assertThrows(ProjectException.class, () -> ProjectTime.formatDate(null),
-					"Should return an exception");   
+			assertEquals("", ProjectTime.formatDate(null), "Should return an empty string");   
 	}
 	
 	@Nested
@@ -97,7 +94,7 @@ class ProjectTimeTest {
 
 		@Test
 		@DisplayName("parsedate with value -1")
-		public void TestParseDate() throws ParseException {
+		public void TestParseDate() {
 			assertThrows(ProjectException.class, () -> ProjectTime.parseDate("99999999"),
 					"weird format should return an exception");
 		}
