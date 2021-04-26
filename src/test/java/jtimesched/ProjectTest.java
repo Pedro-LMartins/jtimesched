@@ -57,6 +57,24 @@ class ProjectTest {
 			assertEquals(10, project.getSecondsToday(),
 					"Get of an existent column should return a String");
 		}		
+		
+		@Test
+		@DisplayName("getColumnName with an existent column index")
+		public void testAdjustSecondsTodayMutation() {
+			project.adjustSecondsToday(-1);
+			assertEquals(0, project.getSecondsToday(),
+					"Get of an existent column should return a String");
+		}	
+		
+		@Test
+		@DisplayName("getColumnName with an existent column index")
+		public void testAdjustSecondsTodayMutation2() {
+			project.setSecondsOverall(30);
+			project.setSecondsToday(10);
+			project.adjustSecondsToday(4);
+			assertEquals(24, project.getSecondsOverall(),
+					"Get of an existent column should return a String");
+		}	
 	}
 	
 	@Nested
@@ -119,8 +137,9 @@ class ProjectTest {
 		void testgetSecondsTodayWithstartedProject() {
 			try {
 				project.start();
-				assertEquals(0, project.getSecondsToday(),
-						"Should return 0 since zero seconds are being counted but it is started");
+				project.setSecondsToday(5);
+				assertEquals(5, project.getSecondsToday(),
+						"Should return 5");
 			}
 			catch (ProjectException e) {
 				fail(e);

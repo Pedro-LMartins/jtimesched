@@ -3,6 +3,9 @@ package jtimesched;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -76,6 +79,13 @@ class ProjectTimeTest {
 			assertThrows(ProjectException.class, () -> ProjectTime.parseSeconds("99999999"),
 					"Should return an exception");
 		}
+		
+		@Test
+		@DisplayName("parseSeconds to cover mutation testing")
+		public void TestParseSecondsMutation() throws ProjectException { 
+			assertEquals(11099, ProjectTime.parseSeconds("03:04:59"),
+					"Should return 11099");
+		}
 	}
 	
 	@Nested
@@ -86,6 +96,14 @@ class ProjectTimeTest {
 		@DisplayName("FormatDate with null value")
 		public void TestFormatDate() {
 			assertEquals("", ProjectTime.formatDate(null), "Should return an empty string");   
+		}
+		
+		@Test
+		@DisplayName("FormatDate to cover mutation")
+		public void TestFormatDateMutation() {
+			Date d1 = new Date(2323223232L);
+			assertEquals("1970-01-27", ProjectTime.formatDate(d1), "Should return 1970-01-27");   
+		}
 	}
 	
 	@Nested
@@ -98,6 +116,12 @@ class ProjectTimeTest {
 			assertThrows(ProjectException.class, () -> ProjectTime.parseDate("99999999"),
 					"weird format should return an exception");
 		}
+		
+		@Test
+		@DisplayName("parsedate for mutation")
+		public void TestParseDateMutation() throws ProjectException {
+			Date d1 = new Date(6, 5, 4, 0, 0, 0);
+			assertEquals(d1, ProjectTime.parseDate("1906-6-4"), "Should return Thu Nov 11 00:00:00 WET 2021");
+		}
 	}
-}
 }

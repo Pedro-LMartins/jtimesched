@@ -65,6 +65,12 @@ class ProjectTableModelTest {
 		public void testColumnSecondOnPoint() {
 			assertNotNull(table.getColumnName(7), "Get of an existent column should return a String");
 		}
+		
+		@Test
+		@DisplayName("getColumnName with column index 5")
+		public void testColumnSecondOffPointMutation() {
+			assertEquals("Time Overall", table.getColumnName(5), "Should return Time Overall");
+		}
 
 		// Tests for Category-Partitioning
 
@@ -551,6 +557,14 @@ class ProjectTableModelTest {
 			table.removeProject(0);
 			
 			assertEquals(0, table.getRowCount(), "No projects should remain after removal");
+		}
+		
+		@Test
+		@DisplayName("Removing existing project")
+		public void testaddProjectMutation() {
+			table.addProject(new Project());
+			
+			assertEquals(1, table.getRowCount(), "There should exist 1 project");
 		}
 	}
 }

@@ -58,6 +58,7 @@ class ProjectSerializerTest {
 		project.setChecked(true);
 		oldList.add(project);
 		
+		
 		serializer.writeXml(oldList);
 		newList = serializer.readXml();
 		
